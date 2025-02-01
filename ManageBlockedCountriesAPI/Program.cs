@@ -11,7 +11,7 @@ builder.Services.AddHttpClient<ICountriesService, CountriesService>(client =>
 {
 	client.BaseAddress = new Uri(builder.Configuration["GeolocationApi:BaseUrl"]);
 });
-builder.Services.Configure<GeolocationApiOptions>(builder.Configuration.GetSection("GeolocationApi"));
+builder.Services.Configure<GeolocationApi>(builder.Configuration.GetSection("GeolocationApi"));
 
 builder.Services.AddSingleton<ICountriesRepository, CountriesRepository>();
 builder.Services.AddSingleton<TemporalBlockService>();

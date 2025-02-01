@@ -1,6 +1,6 @@
 ﻿namespace ManageBlockedCountriesAPI.Models
 {
-	public class LogEntry
+	public class LogData
 	{
 		public string IpAddress { get; set; }
 		public DateTime Timestamp { get; set; }
