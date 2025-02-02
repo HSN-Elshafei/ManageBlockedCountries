@@ -7,7 +7,7 @@ This API allows the management of blocked countries, temporal blocking, and IP-b
 
 ## **Features & Endpoints**
 
-![All Endpoint]("C:\Users\HSN\Desktop\AllEndPoint.png")
+![All Endpoint](https://github.com/user-attachments/assets/e1c01289-6ef9-461c-8b74-bb3f6a4f9389)
 
 ### 1. Add a Blocked Country
 - **Endpoint:** `POST /api/countries/block`
@@ -17,11 +17,16 @@ This API allows the management of blocked countries, temporal blocking, and IP-b
   ```
 - **Action:** Blocks the specified country by its code.
 - **Validation:** Prevents duplicate entries.
+  
+![Add a Blocked Country](https://github.com/user-attachments/assets/24fb63df-8543-4229-ab68-558513f97a5e)
+
 
 ### 2. Delete a Blocked Country
 - **Endpoint:** `DELETE /api/countries/block/{countryCode}`
 - **Action:** Unblocks a specified country.
 - **Error Handling:** Returns `404 Not Found` if the country is not blocked.
+  
+![Delete a Blocked Country](https://github.com/user-attachments/assets/9641366f-6d05-4964-8010-d528ec52cb2e)
 
 ### 3. Get All Blocked Countries
 - **Endpoint:** `GET /api/countries/blocked`
@@ -31,10 +36,16 @@ This API allows the management of blocked countries, temporal blocking, and IP-b
   - `searchTerm` (optional)
 - **Action:** Lists blocked countries with pagination and optional filtering.
 
+![Get All Blocked Countries](https://github.com/user-attachments/assets/eb08eb24-0be7-4f71-9975-53bc0ba3667d)
+
 ### 4. Find My Country via IP Lookup
 - **Endpoint:** `GET /api/ip/lookup?ipAddress={ip}`
 - **Action:** Fetches country details for the provided IP. Uses the caller's IP if omitted.
 - **Validation:** Ensures valid IP format.
+
+![Find My Country via IP Lookup](https://github.com/user-attachments/assets/efe3630d-265f-4337-adee-dd5041af1094)
+
+![Find My Country via IP Lookup](https://github.com/user-attachments/assets/e20c092b-d384-4ff9-ba9f-9fe5bb7b7cef)
 
 ### 5. Verify If IP is Blocked
 - **Endpoint:** `GET /api/ip/check-block`
@@ -43,6 +54,8 @@ This API allows the management of blocked countries, temporal blocking, and IP-b
   2. Fetches the country code using the third-party API.
   3. Checks if the country is in the blocked list.
   4. Logs the attempt.
+
+![Verify If IP is Blocked](https://github.com/user-attachments/assets/17470672-1d93-4c54-ab55-1f6b6371dfe2)
 
 ### 6. Log Failed Blocked Attempts
 - **Endpoint:** `GET /api/logs/blocked-attempts`
@@ -56,6 +69,8 @@ This API allows the management of blocked countries, temporal blocking, and IP-b
   - Country code
   - Blocked status
   - User-Agent
+
+![Log Failed Blocked Attempts](https://github.com/user-attachments/assets/2d257c0e-df76-49b6-8828-4f8c8e80b99c)
 
 ### 7. Temporarily Block a Country
 - **Endpoint:** `POST /api/countries/temporal-block`
@@ -72,13 +87,13 @@ This API allows the management of blocked countries, temporal blocking, and IP-b
   - Rejects invalid country codes.
   - Prevents duplicate temporal blocks (returns `409 Conflict`).
 
+![Temporarily Block a Country](https://github.com/user-attachments/assets/6b5e606d-c6ed-4ca9-a464-97132c444e54)
+
+![Temporarily Block a Country](https://github.com/user-attachments/assets/efbebced-2f1b-4318-bb02-d5175464904d)
+
 ---
 
 ## **Setup Instructions**
-
-### **Prerequisites**
-- .NET 7 or higher installed
-- API key from a third-party geolocation service (e.g., IPGeolocation.io)
 
 ### **Configuration**
 Update the `appsettings.json` file:
@@ -103,20 +118,6 @@ Update the `appsettings.json` file:
    dotnet run
    ```
 4. Open Swagger UI at `https://localhost:5001/swagger/index.html`.
-
----
-
-## **Testing Instructions**
-
-### **Unit Tests**
-Run the unit tests using:
-```bash
- dotnet test
-```
-
-### **Manual Testing via Swagger**
-1. Navigate to `https://localhost:5001/swagger/index.html`.
-2. Use the available endpoints to test functionality.
 
 ---
 
