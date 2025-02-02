@@ -7,11 +7,13 @@ This API allows the management of blocked countries, temporal blocking, and IP-b
 
 ## **Features & Endpoints**
 
+![All Endpoint]("C:\Users\HSN\Desktop\AllEndPoint.png")
+
 ### 1. Add a Blocked Country
 - **Endpoint:** `POST /api/countries/block`
 - **Input:** JSON Body (string)
   ```json
-  "US"
+  "EG"
   ```
 - **Action:** Blocks the specified country by its code.
 - **Validation:** Prevents duplicate entries.
@@ -124,4 +126,5 @@ Run the unit tests using:
 - `409 Conflict`: Duplicate temporal block attempts.
 - `500 Internal Server Error`: Third-party API failures.
 
+---
 
