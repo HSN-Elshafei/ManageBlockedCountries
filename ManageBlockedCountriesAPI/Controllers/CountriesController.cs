@@ -22,30 +22,30 @@ namespace ManageBlockedCountriesAPI.Controllers
 		public async Task<IActionResult> BlockCountry([FromBody] string countryCode)
 		{
 			if (string.IsNullOrEmpty(countryCode))
-				return BadRequest("Country code is required.");
+				return BadRequest("Country code is required");
 
 			if (!await _countriesService.IsValidCountryCodeAsync(countryCode))
-				return BadRequest("Invalid country codes");
+				return BadRequest("Invalid country code");
 
 			if (await _countriesRepo.AddCountry(countryCode))
-				return Ok($"Country {countryCode} blocked successfully.");
+				return Ok($"Country {countryCode} blocked successfully");
 
-			return Conflict($"Country {countryCode} is already blocked.");
+			return Conflict($"Country {countryCode} is already blocked");
 		}
 
 		[HttpDelete("block/{countryCode}")]
 		public async Task<IActionResult> UnblockCountry(string countryCode)
 		{
 			if (await _countriesRepo.RemoveCountry(countryCode))
-				return Ok($"Country {countryCode} unblocked successfully.");
+				return Ok($"Country {countryCode} unblocked successfully");
 
-			return NotFound($"Country {countryCode} is not blocked.");
+			return NotFound($"Country {countryCode} is not blocked");
 		}
 
 		[HttpGet("blocked")]
 		public async Task<IActionResult> GetBlockedCountries([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string searchTerm = null)
 		{
-			return Ok(_countriesRepo.GetBlockedCountries(page, pageSize, searchTerm));
+			return Ok(await _countriesRepo.GetBlockedCountries(page, pageSize, searchTerm));
 		}
 
 		[HttpGet("ip/lookup")]
@@ -63,13 +63,13 @@ namespace ManageBlockedCountriesAPI.Controllers
 
 			if (!System.Net.IPAddress.TryParse(ipAddress, out var parsedIpAddress))
 			{
-				return BadRequest("Invalid IP address format.");
+				return BadRequest("Invalid IP address format");
 			}
 
 			var geoData = await _countriesService.GetGeoDataAsync(ipAddress);
 			if (geoData == null)
 			{
-				return StatusCode(500, "Failed to fetch geo data from the external API.");
+				return StatusCode(500, "Failed to fetch geo data from the external API");
 			}
 
 			return Ok(geoData);
@@ -85,26 +85,22 @@ namespace ManageBlockedCountriesAPI.Controllers
 				ipAddress = currentGeoData.Ip;
 			}
 
-
 			if (!System.Net.IPAddress.TryParse(ipAddress, out var parsedIpAddress))
 			{
-				return BadRequest("Invalid IP address format.");
+				return BadRequest("Invalid IP address format");
 			}
 
 			var geoData = await _countriesService.GetGeoDataAsync(ipAddress);
 
-
 			if (geoData == null)
 			{
-				return StatusCode(500, "Failed to fetch geo data from the external API.");
+				return StatusCode(500, "Failed to fetch geo data from the external API");
 			}
-
 
 			if (string.IsNullOrEmpty(geoData.Country_Code))
 			{
-				return StatusCode(500, "Country code not found in the API response.");
+				return StatusCode(500, "Country code not found in the API response");
 			}
-
 
 			var isBlocked = await _countriesService.IsBlockedAsync(geoData.Country_Code);
 
@@ -128,22 +124,25 @@ namespace ManageBlockedCountriesAPI.Controllers
 		[HttpGet("logs/blocked-attempts")]
 		public async Task<IActionResult> GetBlockedAttempts([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
 		{
-			return Ok(_countriesRepo.GetLogs(page, pageSize));
+			return Ok(await _countriesRepo.GetLogs(page, pageSize));
 		}
 
 		[HttpPost("temporal-block")]
 		public async Task<IActionResult> TemporalBlockCountry([FromBody] TemporalBlockRequest request)
 		{
 			if (request.DurationMinutes < 1 || request.DurationMinutes > 1440)
-				return BadRequest("Duration must be between 1 and 1440 minutes.");
+				return BadRequest("Duration must be between 1 and 1440 minutes");
 
 			if (!await _countriesService.IsValidCountryCodeAsync(request.CountryCode))
-				return BadRequest("Invalid country codes");
+				return BadRequest("Invalid country code");
+
+			if (await _countriesService.IsBlockedAsync(request.CountryCode))
+				return Conflict($"Country {request.CountryCode} is already temporarily blocked");
 
 			if (!await _countriesRepo.AddTemporalBlock(request.CountryCode, TimeSpan.FromMinutes(request.DurationMinutes)))
-				return Conflict($"Country {request.CountryCode} is already temporarily blocked.");
+				return Conflict($"Country {request.CountryCode} is already temporarily blocked");
 
-			return Ok($"Country {request.CountryCode} temporarily blocked for {request.DurationMinutes} minutes.");
+			return Ok($"Country {request.CountryCode} temporarily blocked for {request.DurationMinutes} minutes");
 		}
 	}
 }

@@ -49,8 +49,7 @@ namespace ManageBlockedCountriesAPI.Repositories
 		public async Task<bool> AddTemporalBlock(string countryCode, TimeSpan duration)
 		{
 			var expirationTime = DateTime.UtcNow.Add(duration);
-			return _countryBlocks.TryAdd(countryCode, new BlockInfo { IsTemporary = true, ExpirationTime = expirationTime })
-				|| (_countryBlocks.TryGetValue(countryCode, out var block) && block.IsTemporary && (block.ExpirationTime = expirationTime) != null);
+			return _countryBlocks.TryAdd(countryCode, new BlockInfo { IsTemporary = true, ExpirationTime = expirationTime });
 		}
 
 		public void RemoveTemporalBlocks()
